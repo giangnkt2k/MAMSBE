@@ -1,0 +1,81 @@
+{
+    "title": "Standard Framework JA",
+    "routes": {
+        "dashboard": "Dashboard JA",
+        "admin": "Administration JA",
+        "city": "City JA",
+        "user": "User JA",
+        "setting":"Setting JA",
+        "profile":"Profile JA",
+        "roles":"役割管理",
+        "image": "Image JA"
+    },
+    "navbar": {
+        "logout": "Logout JA",
+        "languages": {
+            "en": "English JA",
+            "ja": "Japanese JA"
+        }
+    },
+    "notiChangeLang": {
+        "title": "Change language JA",
+        "content": "Successful change language English JA"
+    },
+    "views": {
+        "login": {
+            "changelang": "Change language JA"
+        }
+    },
+    "login_page": {
+        "title": "Wellcome back! JA",
+        "placeholder_username": "Username JA",
+        "placeholder_password": "Password JA",
+        "button_submit": "Submit JA",
+        "button_register": "Register JA",
+        "button_forgot_password": "Forgot Password ? JA"
+    },
+    "register_page": {
+        "placeholder_name": "Name JA",
+        "placeholder_phone": "Phone JA",
+        "placeholder_email": "Email JA",
+        "placeholder_shop_name": "Shop Name JA",
+        "placeholder_province_id": "Province ID JA",
+        "placeholder_password": "Password JA",
+        "placeholder_confirmation_password": "Confirmation Password JA",
+        "button_register": "Register JA"
+    },
+    "remind_password_page": {
+        "button_submit": "Submit JA"
+    },
+    "setting":{
+        "title":"設定一覧",
+        "create":"新しい設定を作成",
+        "name":"名",
+        "key":"キー",
+        "value":"値",
+        "type":"タイプ",
+        "detail":"詳細",
+        "edit":"編集",
+        "delete":"削除",
+        "save":"保存",
+        "cancel":"キャンセル",
+        "back":"戻る",
+        "action":"アクション",
+        "return":"索引に戻る"
+    },
+    "roles":{
+        "title":"役割のリスト",
+        "create":"新しい役割を作成する",
+        "name":"名",
+        "display_name":"表示名",
+        "description":"説明",
+        "role_name":"役割名",
+        "choose":"選択",
+        "detail":"詳細",
+        "edit":"編集",
+        "save":"保存",
+        "cancel":"キャンセル",
+        "back":"戻る",
+        "action":"アクション"
+    }
+}

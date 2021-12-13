@@ -1,0 +1,17 @@
+import { shallowMount } from '@vue/test-utils';
+import App from '@/views/App.vue';
+
+describe('Test Component App', () => {
+    const wrapper = shallowMount(App, {
+        mocks: {
+            $t: () => {},
+        },
+        stubs: {
+            RouterView: true,
+        },
+    });
+
+    it('Case: Check component App has data', () => {
+        expect(typeof App.data).toBe('function');
+    });
+});

@@ -1,0 +1,84 @@
+{
+    "title": "Standard Framework",
+    "routes": {
+        "dashboard": "Dashboard",
+        "admin": "Administration",
+        "city": "City",
+        "user": "User",
+        "setting":"Setting",
+        "profile":"Profile",
+        "roles":"Roles Management",
+        "image": "Image Management"
+    },
+    "navbar": {
+        "logout": "Logout",
+        "languages": {
+            "en": "English",
+            "ja": "Japanese"
+        }
+    },
+    "views": {
+        "login": {
+            "changelang": "Change language"
+        }
+    },
+    "notiChangeLang": {
+        "title": "Change language",
+        "content": "Successful change language Japanese"
+    },
+    "login_page": {
+        "title": "Wellcome back!",
+        "placeholder_username": "Username",
+        "placeholder_password": "Password",
+        "button_submit": "Submit",
+        "button_register": "Register",
+        "button_forgot_password": "Forgot Password ?"
+    },
+    "register_page": {
+        "title": "New Register",
+        "placeholder_name": "Name",
+        "placeholder_phone": "Phone",
+        "placeholder_email": "Email",
+        "placeholder_shop_name": "Shop Name",
+        "placeholder_province_id": "Province ID",
+        "placeholder_password": "Password",
+        "placeholder_confirmation_password": "Confirmation Password",
+        "button_register": "Register"
+    },
+    "remind_password_page": {
+        "title":"Remind Password",
+        "button_submit": "Submit"
+    },
+    "setting":{
+        "title":"List of setting",
+        "create":"Create New Setting",
+        "name":"Name",
+        "key":"Key",
+        "value":"Value",
+        "type":"Type",
+        "detail":"Detail",
+        "edit":"Edit",
+        "delete":"Delete",
+        "save":"Save",
+        "cancel":"Cancel",
+        "back":"Back",
+        "action":"Action",
+        "return":"Return to Index"
+    },
+    "roles":{
+        "title":"List of roles",
+        "create":"Create New Roles",
+        "name":"Name",
+        "display_name":"Display name",
+        "description":"Description",
+        "role_name":"Role name",
+        "choose":"Choose",
+        "detail":"Detail",
+        "edit":"Edit",
+        "save":"Save",
+        "cancel":"Cancel",
+        "back":"Back",
+        "action":"Action"
+    }
+    
+}
