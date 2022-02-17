@@ -1,6 +1,6 @@
 <?php
 
-define('DEFAULT_ZERO_PAD',  5);
+define('DEFAULT_ZERO_PAD',  '5');
 define('DEFAULT_STR_ZERO',  '0');
 
 define('CODE_SUCCESS', 200);
