@@ -12,6 +12,7 @@ use App\Repositories\Contracts\BuildingRepositoryInterface;
 use Repository\BaseRepository;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Auth;
+use Helper\Common;
 
 class BuildingRepository extends BaseRepository implements BuildingRepositoryInterface
 {
@@ -33,10 +34,21 @@ class BuildingRepository extends BaseRepository implements BuildingRepositoryInt
         return Building::class;
     }
 
-    public function CreateBuilding($request)
+    // public function CreateBuilding($request)
+    // {
+
+    // }
+
+    public function getAll ($request)
     {
-
+        if(isset($request->key_search)) {
+            $buildings = $this->model->select('buildings.*')->with(['name', 'address', 'detail'])->search($request->key_search);
+        }
+        else
+        {
+            $buildings = $this->model->select('buildings.*')->get();
+        }
+        error_log($request);
+        return  $buildings;
     }
-
-
 }

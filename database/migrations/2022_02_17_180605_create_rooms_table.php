@@ -24,6 +24,7 @@ class CreateRoomsTable extends Migration
             $table->integer('deposit')->nullable();
             $table->date('date_empty')->nullable();
             $table->integer('status')->nullable();
+            $table->timestamps();
         });
     }
 

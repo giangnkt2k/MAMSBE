@@ -1,9 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: cuongnt
- * Year: 2022-02-17
- */
 
 namespace App\Models;
 
@@ -30,7 +25,11 @@ class Building extends Model
         'e_money_1kwh',
         'w_money_1block',
         'date_record_ew',
-        'date_charge'
+        'date_charge',
+        'utilities',
+        'rules',
+        'images',
+        'detail',
     ];
 
 

@@ -26,6 +26,10 @@ class CreateBuildingsTable extends Migration
             $table->integer('w_money_1block')->nullable();
             $table->date('date_record_ew')->nullable();
             $table->date('date_charge')->nullable();
+            $table->json('utilities')->nullable();
+            $table->json('rules')->nullable();
+            $table->string('images')->nullable();
+            $table->string('detail')->nullable();
             $table->timestamps();
 
         });
