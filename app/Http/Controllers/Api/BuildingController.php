@@ -13,7 +13,8 @@ use App\Repositories\Contracts\BuildingRepositoryInterface;
 use App\Http\Resources\BaseResource;
 use App\Http\Resources\BuildingResource;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Storage;
+use Helper\Common;
 class BuildingController extends Controller
 {
 
@@ -101,7 +102,12 @@ class BuildingController extends Controller
     public function store(BuildingRequest $request)
     {
         try {
-            $data = $this->repository->create($request->all());
+            $req = $request->all();
+            $req['utilities'] = json_encode($request->utilities);
+            $req['rules'] = json_encode($request->rules);
+
+            Common::uploadFile($req['images'], '/storage/images');
+            $data = $this->repository->create($req);
             return $this->responseJson(200, new BuildingResource($data));
         } catch (\Exception $e) {
             throw $e;

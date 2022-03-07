@@ -14,7 +14,6 @@ class Building extends Model
     protected $table = 'buildings';
 
     protected $fillable = [
-        'id',
         'name',
         'address',
         'type_building',
