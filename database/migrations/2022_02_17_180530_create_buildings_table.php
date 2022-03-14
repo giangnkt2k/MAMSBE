@@ -24,13 +24,14 @@ class CreateBuildingsTable extends Migration
             $table->string('commune')->nullable();
             $table->integer('e_money_1kwh')->nullable();
             $table->integer('w_money_1block')->nullable();
-            $table->date('date_record_ew')->nullable();
-            $table->date('date_charge')->nullable();
+            $table->string('date_record_ew')->nullable();
+            $table->string('date_charge')->nullable();
             $table->json('utilities')->nullable();
             $table->json('rules')->nullable();
             $table->string('images')->nullable();
             $table->string('detail')->nullable();
             $table->timestamps();
+            $table->softDeletes();
 
         });
     }

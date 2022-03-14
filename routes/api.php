@@ -31,6 +31,9 @@ Route::group(['namespace' => 'App\Http\Controllers\Api'], function () {
         Route::apiResource('setting', 'SettingController');
         Route::apiResource('blog', 'BlogController');
         Route::apiResource('building', 'BuildingController');
+        Route::post('building/delete', 'BuildingController@destroy');
+        Route::post('building/import', 'BuildingController@import');
+        Route::post('building/deleteImg', 'BuildingController@deleteImg');
         Route::apiResource('room', 'RoomController');
         Route::post('image/edit/{id}', 'ImageController@update');
         Route::apiResource('image', 'ImageController');

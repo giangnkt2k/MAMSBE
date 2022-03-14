@@ -15,6 +15,8 @@ use App\Http\Resources\BuildingResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Helper\Common;
+use Illuminate\Http\Response;
+
 class BuildingController extends Controller
 {
 
@@ -70,9 +72,9 @@ class BuildingController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index(BuildingRequest $request)
+    public function index(Request $request)
     {
-        $data = $this->repository->paginate($request->per_page);
+        $data = $this->repository->getAll($request);
         return $this->responseJson(200, BaseResource::collection($data));
     }
 
@@ -105,12 +107,31 @@ class BuildingController extends Controller
             $req = $request->all();
             $req['utilities'] = json_encode($request->utilities);
             $req['rules'] = json_encode($request->rules);
-
-            Common::uploadFile($req['images'], '/storage/images');
+            $req['images'] = json_encode($request->images);
             $data = $this->repository->create($req);
-            return $this->responseJson(200, new BuildingResource($data));
+            return $this->responseJson(200, new BaseResource($data));
         } catch (\Exception $e) {
             throw $e;
+        }
+    }
+
+    public function import(BuildingRequest $request)
+    {
+        try {
+            $image = $this->repository->import($request);
+            return $this->responseJson(Response::HTTP_OK, $image, 'upload success');
+        } catch (\Exception $e) {
+            return $this->responseJsonEx($e);
+        }
+    }
+
+    public function deleteImg(BuildingRequest $request)
+    {
+        try {
+            $image = $this->repository->deleteImg($request);
+            return $this->responseJson(Response::HTTP_OK, $image, 'upload success');
+        } catch (\Exception $e) {
+            return $this->responseJsonEx($e);
         }
     }
 
@@ -247,6 +268,6 @@ class BuildingController extends Controller
     public function destroy($id)
     {
         $this->repository->delete($id);
-        return $this->responseJson(200, null, trans('messages.mes.delete_success'));
+        return $this->responseJson(200, null, 'delete success');
     }
 }

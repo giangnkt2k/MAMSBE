@@ -31,10 +31,16 @@ class Building extends Model
         'detail',
     ];
 
-
     protected $casts = [
         'data' => 'array'
     ];
+
+    public function scopeSearch($query, $term)
+    {
+        if($term){
+            $query->where('name', 'like', "%{$term}%");
+        }
+    }
 
     public function room()
     {
