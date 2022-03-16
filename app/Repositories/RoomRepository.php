@@ -12,6 +12,7 @@ use App\Repositories\Contracts\RoomRepositoryInterface;
 use Repository\BaseRepository;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Auth;
+use Helper\Common;
 
 class RoomRepository extends BaseRepository implements RoomRepositoryInterface
 {
@@ -33,5 +34,18 @@ class RoomRepository extends BaseRepository implements RoomRepositoryInterface
         return Room::class;
     }
 
+    public function getAll ($request)
+    {
+        if(isset($request->key_search)) {
+            $rooms = $this->model->select('rooms.*')->search($request->key_search);
+        }
+        else
+        {
+            $rooms = $this->model->with(['building'])->where(['building_id'=> $request->building_id]);
 
+            // $rooms = $this->model->select('rooms.*');
+        }
+        error_log($request->building_id);
+        return  Common::pagination($request, $rooms);
+    }
 }

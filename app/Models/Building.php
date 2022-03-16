@@ -29,6 +29,7 @@ class Building extends Model
         'rules',
         'images',
         'detail',
+        'floor'
     ];
 
     protected $casts = [

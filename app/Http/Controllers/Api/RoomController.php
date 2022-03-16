@@ -69,9 +69,10 @@ class RoomController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index(RoomRequest $request)
+    public function index(Request $request)
     {
-        $data = $this->repository->with(['building'])->where(['building_id'=> $request->buiding_id])->paginate($request->per_page);
+        $data = $this->repository->getAll($request);
+        error_log($data);
         return $this->responseJson(200, BaseResource::collection($data));
     }
 
