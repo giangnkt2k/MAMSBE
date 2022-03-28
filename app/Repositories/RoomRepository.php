@@ -13,6 +13,8 @@ use Repository\BaseRepository;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Auth;
 use Helper\Common;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class RoomRepository extends BaseRepository implements RoomRepositoryInterface
 {
@@ -37,7 +39,7 @@ class RoomRepository extends BaseRepository implements RoomRepositoryInterface
     public function getAll ($request)
     {
         if(isset($request->key_search)) {
-            $rooms = $this->model->select('rooms.*')->search($request->key_search);
+            $rooms = $this->model->with(['building'])->where(['building_id'=> $request->building_id])->select('rooms.*')->search($request->key_search);
         }
         else
         {
@@ -47,5 +49,23 @@ class RoomRepository extends BaseRepository implements RoomRepositoryInterface
         }
         error_log($request->building_id);
         return  Common::pagination($request, $rooms);
+    }
+
+    public function import($request)
+    {
+        DB::beginTransaction();
+        if(isset($request['file'])){
+            $image = Common::uploadFile($request['file'], '');
+        }
+        return $image;
+    }
+
+    public function deleteImg($request)
+    {
+        DB::beginTransaction();
+        if(isset($request['file'])){
+            Storage::delete($request['file']);
+        }
+        return 'deleted';
     }
 }

@@ -31,10 +31,17 @@ Route::group(['namespace' => 'App\Http\Controllers\Api'], function () {
         Route::apiResource('setting', 'SettingController');
         Route::apiResource('blog', 'BlogController');
         Route::apiResource('building', 'BuildingController');
+        Route::apiResource('client', 'ClientController');
         Route::post('building/delete', 'BuildingController@destroy');
         Route::post('building/import', 'BuildingController@import');
+        Route::post('room/import', 'RoomController@import');
+        Route::post('room/deleteImg', 'RoomController@deleteImg');
         Route::post('building/deleteImg', 'BuildingController@deleteImg');
         Route::apiResource('room', 'RoomController');
+        Route::post('client/import', 'ClientController@import');
+        Route::post('client/deleteImg', 'ClientController@deleteImg');
+        Route::post('client/importAva', 'ClientController@importAva');
+        Route::post('client/deleteImgAva', 'ClientController@deleteImgAva');
         Route::post('image/edit/{id}', 'ImageController@update');
         Route::apiResource('image', 'ImageController');
 

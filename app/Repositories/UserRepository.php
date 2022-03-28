@@ -30,4 +30,11 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         return User::with('images')->get();
 //        return $this->syncWithoutDetaching($id, 'images', 'url');
     }
+
+    public function getUserById($id)
+    {
+        $data = $this->model->where('id', $id)->first();
+
+        return $data;
+    }
 }

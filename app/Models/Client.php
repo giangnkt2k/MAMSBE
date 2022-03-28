@@ -2,7 +2,7 @@
 /**
  * Created by PhpStorm.
  * User: cuongnt
- * Year: 2022-02-17
+ * Year: 2022-03-26
  */
 
 namespace App\Models;
@@ -10,35 +10,30 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\Building;
 
-class Room extends Model
+class Client extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
-
-    protected $table = 'rooms';
+    protected $table = 'clients';
 
     protected $fillable = [
         'id',
         'name',
-        'building_id',
-        'floor_id',
-        'number_of_people',
-        'price',
-        'acreage_m2',
-        'deposit',
-        'date_empty',
-        'status',
+        'phone',
+        'ci_number',
+        'place_of_issuance_of_ci',
+        'date_of_issuance_of_ci',
+        'dob',
+        'email',
+        'address',
+        'city',
+        'district',
+        'commune',
+        'avatar',
         'images',
-        'utilities',
-        'rules',
         'detail'
-    ];
-
-
-    protected $casts = [
-        'data' => 'array'
     ];
 
     public function scopeSearch($query, $term)
@@ -47,10 +42,10 @@ class Room extends Model
             $query->where('name', 'like', "%{$term}%");
         }
     }
+    protected $dates = ['deleted_at'];
 
-    public function building()
-    {
-        return $this->belongsTo(building::class, 'building_id');
-    }
+    protected $casts = [
+        'data' => 'array'
+    ];
 
 }

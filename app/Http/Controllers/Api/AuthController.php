@@ -276,9 +276,9 @@ class AuthController extends BaseController
 //        return $this->responseJson(200, auth()->user());
 //    }
     public function getProfile(){
-//        $user = User::find(auth()->user()->id)->with('images');
-        $user = $this->userRepository->getImageidbyUser(auth()->user()->id);
-        return $this->responseJson(200, $user);
+        $id = auth()->user()->id;
+        $user = $this->userRepository->getUserById($id);
+        return $this->responseJson(Response::HTTP_OK, $user);
     }
 
 
@@ -351,5 +351,6 @@ class AuthController extends BaseController
         $data = $this->authRepository->update($request->all(), Auth::id());
         return $this->responseJson(200, new BaseResource($data));
     }
+
 }
 

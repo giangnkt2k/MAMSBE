@@ -2,20 +2,20 @@
 /**
  * Created by PhpStorm.
  * User: cuongnt
- * Year: 2022-02-17
+ * Year: 2022-03-26
  */
 
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\RoomRequest;
-use App\Repositories\Contracts\RoomRepositoryInterface;
+use App\Http\Requests\ClientRequest;
+use App\Repositories\Contracts\ClientRepositoryInterface;
 use App\Http\Resources\BaseResource;
-use App\Http\Resources\RoomResource;
+use App\Http\Resources\ClientResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class RoomController extends Controller
+class ClientController extends Controller
 {
 
      /**
@@ -23,17 +23,17 @@ class RoomController extends Controller
      */
     protected $repository;
 
-    public function __construct(RoomRepositoryInterface $repository)
+    public function __construct(ClientRepositoryInterface $repository)
     {
         $this->repository = $repository;
     }
 
     /**
      * @OA\Get(
-     *   path="/api/room",
-     *   tags={"Room"},
-     *   summary="List room",
-     *   operationId="room_index",
+     *   path="/api/client",
+     *   tags={"Client"},
+     *   summary="List client",
+     *   operationId="client_index",
      *   @OA\Response(
      *     response=200,
      *     description="Send request success",
@@ -70,19 +70,18 @@ class RoomController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index(Request $request)
+    public function index(ClientRequest $request)
     {
         $data = $this->repository->getAll($request);
-        error_log($data);
         return $this->responseJson(200, BaseResource::collection($data));
     }
 
     /**
      * @OA\Post(
-     *   path="/api/room",
-     *   tags={"Room"},
-     *   summary="Add new room",
-     *   operationId="room_create",
+     *   path="/api/client",
+     *   tags={"Client"},
+     *   summary="Add new client",
+     *   operationId="client_create",
      *   @OA\Parameter(name="name", in="query", required=true,
      *     @OA\Schema(type="string"),
      *   ),
@@ -100,27 +99,66 @@ class RoomController extends Controller
      * @return \Illuminate\Http\JsonResponse
      * @throws \Exception
      */
-    public function store(RoomRequest $request)
+    public function store(ClientRequest $request)
     {
         try {
             $req = $request->all();
-            $req['utilities'] = json_encode($request->utilities);
-            $req['rules'] = json_encode($request->rules);
+            if(isset($req['avatar'])) {
+            $req['avatar'] = json_encode($request->avatar);
+            }
             $req['images'] = json_encode($request->images);
-            // dd($req['utilities']);
             $data = $this->repository->create($req);
-            return $this->responseJson(200, new RoomResource($data));
+            return $this->responseJson(200, new ClientResource($data));
         } catch (\Exception $e) {
             throw $e;
         }
     }
 
+    public function import(ClientRequest $request)
+    {
+        try {
+            $image = $this->repository->import($request);
+            return $this->responseJson(Response::HTTP_OK, $image, 'upload success');
+        } catch (\Exception $e) {
+            return $this->responseJsonEx($e);
+        }
+    }
+
+    public function deleteImg(ClientRequest $request)
+    {
+        try {
+            $image = $this->repository->deleteImg($request);
+            return $this->responseJson(Response::HTTP_OK, $image, 'upload success');
+        } catch (\Exception $e) {
+            return $this->responseJsonEx($e);
+        }
+    }
+
+    public function importAva(ClientRequest $request)
+    {
+        try {
+            $image = $this->repository->importAva($request);
+            return $this->responseJson(Response::HTTP_OK, $image, 'upload success');
+        } catch (\Exception $e) {
+            return $this->responseJsonEx($e);
+        }
+    }
+
+    public function deleteImgAva(ClientRequest $request)
+    {
+        try {
+            $image = $this->repository->deleteImgAva($request);
+            return $this->responseJson(Response::HTTP_OK, $image, 'upload success');
+        } catch (\Exception $e) {
+            return $this->responseJsonEx($e);
+        }
+    }
     /**
      * @OA\Get(
-     *   path="/api/room/{id}",
-     *   tags={"Room"},
-     *   summary="Detail Room",
-     *   operationId="room_show",
+     *   path="/api/client/{id}",
+     *   tags={"Client"},
+     *   summary="Detail Client",
+     *   operationId="client_show",
      *   @OA\Parameter(
      *     name="id",
      *     in="path",
@@ -163,10 +201,10 @@ class RoomController extends Controller
 
     /**
      * @OA\Post(
-     *   path="/api/room/{id}",
-     *   tags={"Room"},
-     *   summary="Update Room",
-     *   operationId="room_update",
+     *   path="/api/client/{id}",
+     *   tags={"Client"},
+     *   summary="Update Client",
+     *   operationId="client_update",
      *   @OA\Parameter(
      *     name="id",
      *     in="path",
@@ -210,7 +248,7 @@ class RoomController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(RoomRequest $request, $id)
+    public function update(ClientRequest $request, $id)
     {
         $attributes = $request->except([]);
         $data = $this->repository->update($attributes, $id);
@@ -219,10 +257,10 @@ class RoomController extends Controller
 
     /**
      * @OA\Delete(
-     *   path="/api/room/{id}",
-     *   tags={"Room"},
+     *   path="/api/client/{id}",
+     *   tags={"Client"},
      *   summary="Delete ..............",
-     *   operationId="room_delete",
+     *   operationId="client_delete",
      *   @OA\Parameter(
      *      name="id",
      *      in="path",
@@ -249,15 +287,5 @@ class RoomController extends Controller
     {
         $this->repository->delete($id);
         return $this->responseJson(200, null, trans('messages.mes.delete_success'));
-    }
-
-    public function import(RoomRequest $request)
-    {
-        try {
-            $image = $this->repository->import($request);
-            return $this->responseJson(Response::HTTP_OK, $image, 'upload success');
-        } catch (\Exception $e) {
-            return $this->responseJsonEx($e);
-        }
     }
 }
