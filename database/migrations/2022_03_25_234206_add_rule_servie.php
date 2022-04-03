@@ -18,6 +18,7 @@ class AddRuleServie extends Migration
             $table->json('rules')->nullable();
             $table->string('images')->nullable();
             $table->string('detail')->nullable();
+            $table->boolean('rent')->nullable();
         });
     }
 

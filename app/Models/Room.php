@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Building;
+use App\Models\Contract;
 
 class Room extends Model
 {
@@ -33,7 +34,8 @@ class Room extends Model
         'images',
         'utilities',
         'rules',
-        'detail'
+        'detail',
+        'rent'
     ];
 
 
@@ -52,5 +54,10 @@ class Room extends Model
     {
         return $this->belongsTo(building::class, 'building_id');
     }
+
+    // public function contract()
+    // {
+    //     return $this->belongsTo(building::class, 'building_id');
+    // }
 
 }

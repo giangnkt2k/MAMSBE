@@ -77,6 +77,7 @@ class ClientRepository extends BaseRepository implements ClientRepositoryInterfa
         if(isset($request['avatar'])){
             $image = Common::uploadFile($request['avatar'], '');
         }
+        error_log($image);
         return $image;
     }
 

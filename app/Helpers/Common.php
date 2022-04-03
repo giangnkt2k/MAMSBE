@@ -32,7 +32,8 @@ class Common
     public static function uploadFile(UploadedFile $file, $path = '', $userId = null)
     {
         $userId = $userId ?? Auth::id();
-        $fileName = time().'.'.$file->getClientOriginalExtension();
+        $fileName = $file->getClientOriginalName();
+
         return $file->storeAs($path, $fileName);
     }
 

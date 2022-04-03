@@ -15,6 +15,8 @@ use App\Repositories\UserRepository;
 use App\Repositories\Contracts\CityRepositoryInterface;
 use App\Repositories\Contracts\RoomRepositoryInterface;
 use App\Repositories\Contracts\ClientRepositoryInterface;
+use App\Repositories\Contracts\ContractRepositoryInterface;
+use App\Repositories\Contracts\RentalRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 use Repository\BaseRepository;
 use Repository\AuthRepository;
@@ -27,7 +29,9 @@ use Repository\RoleRepository;
 use Laravel\Dusk\DuskServiceProvider;
 use Repository\BuildingRepository;
 use Repository\RoomRepository;
+use Repository\ContractRepository;
 use Repository\SettingRepository;
+use Repository\RentalRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -48,6 +52,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(BuildingRepositoryInterface::class, BuildingRepository::class);
         $this->app->bind(RoomRepositoryInterface::class, RoomRepository::class);
         $this->app->bind(ClientRepositoryInterface::class, ClientRepository::class);
+        $this->app->bind(ContractRepositoryInterface::class, ContractRepository::class);
+        $this->app->bind(RentalRepositoryInterface::class, RentalRepository::class);
         //Customer
         if ($this->app->environment('local', 'testing')) {
             $this->app->register(DuskServiceProvider::class);

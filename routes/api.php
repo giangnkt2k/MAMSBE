@@ -38,6 +38,8 @@ Route::group(['namespace' => 'App\Http\Controllers\Api'], function () {
         Route::post('room/deleteImg', 'RoomController@deleteImg');
         Route::post('building/deleteImg', 'BuildingController@deleteImg');
         Route::apiResource('room', 'RoomController');
+        Route::apiResource('contract', 'ContractController');
+        Route::apiResource('rental', 'RentalController');
         Route::post('client/import', 'ClientController@import');
         Route::post('client/deleteImg', 'ClientController@deleteImg');
         Route::post('client/importAva', 'ClientController@importAva');
