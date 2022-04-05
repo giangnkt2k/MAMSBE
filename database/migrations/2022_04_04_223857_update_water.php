@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateWatersTable extends Migration
+class UpdateWater extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,11 @@ class CreateWatersTable extends Migration
      */
     public function up()
     {
-        Schema::create('waters', function (Blueprint $table) {
-            $table->id();
+        Schema::table('waters', function (Blueprint $table) {
             $table->integer('room_id');
             $table->date('date');
             $table->integer('old_number');
             $table->integer('new_number');
-            $table->timestamps();
             $table->softDeletes();
         });
     }
@@ -31,6 +29,8 @@ class CreateWatersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('waters');
+        Schema::table('waters', function (Blueprint $table) {
+            //
+        });
     }
 }

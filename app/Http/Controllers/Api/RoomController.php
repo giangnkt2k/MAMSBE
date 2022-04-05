@@ -77,6 +77,12 @@ class RoomController extends Controller
         return $this->responseJson(200, BaseResource::collection($data));
     }
 
+    public function indexCollectWater(Request $request)
+    {
+        $data = $this->repository->getListToCollectWater($request);
+        return $this->responseJson(200, BaseResource::collection($data));
+    }
+
     /**
      * @OA\Post(
      *   path="/api/room",

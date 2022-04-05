@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Helper\Common;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-
+use Carbon\Carbon;
 class RoomRepository extends BaseRepository implements RoomRepositoryInterface
 {
 
@@ -48,6 +48,19 @@ class RoomRepository extends BaseRepository implements RoomRepositoryInterface
             // $rooms = $this->model->select('rooms.*');
         }
         error_log($request->building_id);
+        return  Common::pagination($request, $rooms);
+    }
+
+    public function getListToCollectWater ($request)
+    {
+
+            $rooms = $this->model->with(['building'])
+            ->with('water', function($query) use($request) {
+                $query->whereIn('date', [$request->date, $request->date('date')->subMonth()->format('Y-m-d')]);
+            })
+            ->where(['building_id'=> $request->building_id])
+            ->where(['floor_id' => $request->floor_id]);
+
         return  Common::pagination($request, $rooms);
     }
 

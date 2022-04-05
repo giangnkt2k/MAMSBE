@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Building;
+use App\Models\Water;
+use App\Models\Electric;
 use App\Models\Contract;
 
 class Room extends Model
@@ -53,6 +55,16 @@ class Room extends Model
     public function building()
     {
         return $this->belongsTo(building::class, 'building_id');
+    }
+
+    public function water()
+    {
+        return $this->hasMany(water::class);
+    }
+
+    public function electric()
+    {
+        return $this->hasMany(electric::class);
     }
 
     // public function contract()

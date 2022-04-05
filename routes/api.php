@@ -35,6 +35,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Api'], function () {
         Route::post('building/delete', 'BuildingController@destroy');
         Route::post('building/import', 'BuildingController@import');
         Route::post('room/import', 'RoomController@import');
+        Route::get('room/collectWater', 'RoomController@indexCollectWater');
         Route::post('room/deleteImg', 'RoomController@deleteImg');
         Route::post('building/deleteImg', 'BuildingController@deleteImg');
         Route::apiResource('room', 'RoomController');

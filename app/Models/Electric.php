@@ -18,7 +18,13 @@ class Electric extends Model
 
     protected $table = 'electrics';
 
-    protected $fillable = [];
+    protected $fillable = [
+        'id',
+        'room_id',
+        'date',
+        'old_number',
+        'new_number',
+    ];
 
     protected $dates = ['deleted_at'];
 

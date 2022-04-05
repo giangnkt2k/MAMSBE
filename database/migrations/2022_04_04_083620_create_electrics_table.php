@@ -15,7 +15,12 @@ class CreateElectricsTable extends Migration
     {
         Schema::create('electrics', function (Blueprint $table) {
             $table->id();
+            $table->integer('room_id');
+            $table->date('date');
+            $table->integer('old_number');
+            $table->integer('new_number');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
