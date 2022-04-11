@@ -2,21 +2,20 @@
 /**
  * Created by PhpStorm.
  * User: cuongnt
- * Year: 2022-04-04
+ * Year: 2022-04-08
  */
 
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ElectricRequest;
-use App\Repositories\Contracts\ElectricRepositoryInterface;
+use App\Http\Requests\UtilitiesRequest;
+use App\Repositories\Contracts\UtilitiesRepositoryInterface;
+use App\Http\Resources\UtilitiesRequest;
 use App\Http\Resources\BaseResource;
-use App\Http\Resources\ElectricResource;
+use App\Http\Resources\UtilitiesResource;
 use Illuminate\Http\Request;
-use App\Models\Electric;
 
-
-class ElectricController extends Controller
+class UtilitiesController extends Controller
 {
 
      /**
@@ -24,17 +23,17 @@ class ElectricController extends Controller
      */
     protected $repository;
 
-    public function __construct(ElectricRepositoryInterface $repository)
+    public function __construct(UtilitiesRepositoryInterface $repository)
     {
         $this->repository = $repository;
     }
 
     /**
      * @OA\Get(
-     *   path="/api/electric",
-     *   tags={"Electric"},
-     *   summary="List electric",
-     *   operationId="electric_index",
+     *   path="/api/utilities",
+     *   tags={"Utilities"},
+     *   summary="List utilities",
+     *   operationId="utilities_index",
      *   @OA\Response(
      *     response=200,
      *     description="Send request success",
@@ -71,7 +70,7 @@ class ElectricController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index(ElectricRequest $request)
+    public function index(UtilitiesRequest $request)
     {
         $data = $this->repository->paginate($request->per_page);
         return $this->responseJson(200, BaseResource::collection($data));
@@ -79,10 +78,10 @@ class ElectricController extends Controller
 
     /**
      * @OA\Post(
-     *   path="/api/electric",
-     *   tags={"Electric"},
-     *   summary="Add new electric",
-     *   operationId="electric_create",
+     *   path="/api/utilities",
+     *   tags={"Utilities"},
+     *   summary="Add new utilities",
+     *   operationId="utilities_create",
      *   @OA\Parameter(name="name", in="query", required=true,
      *     @OA\Schema(type="string"),
      *   ),
@@ -100,11 +99,11 @@ class ElectricController extends Controller
      * @return \Illuminate\Http\JsonResponse
      * @throws \Exception
      */
-    public function store(ElectricRequest $request)
+    public function store(UtilitiesRequest $request)
     {
         try {
             $data = $this->repository->create($request->all());
-            return $this->responseJson(200, new ElectricResource($data));
+            return $this->responseJson(200, new UtilitiesResource($data));
         } catch (\Exception $e) {
             throw $e;
         }
@@ -112,10 +111,10 @@ class ElectricController extends Controller
 
     /**
      * @OA\Get(
-     *   path="/api/electric/{id}",
-     *   tags={"Electric"},
-     *   summary="Detail Electric",
-     *   operationId="electric_show",
+     *   path="/api/utilities/{id}",
+     *   tags={"Utilities"},
+     *   summary="Detail Utilities",
+     *   operationId="utilities_show",
      *   @OA\Parameter(
      *     name="id",
      *     in="path",
@@ -158,10 +157,10 @@ class ElectricController extends Controller
 
     /**
      * @OA\Post(
-     *   path="/api/electric/{id}",
-     *   tags={"Electric"},
-     *   summary="Update Electric",
-     *   operationId="electric_update",
+     *   path="/api/utilities/{id}",
+     *   tags={"Utilities"},
+     *   summary="Update Utilities",
+     *   operationId="utilities_update",
      *   @OA\Parameter(
      *     name="id",
      *     in="path",
@@ -205,28 +204,19 @@ class ElectricController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(ElectricRequest $request, $id)
+    public function update(UtilitiesRequest $request, $id)
     {
-        // $findData = $this->repository->find($id);
-        // dd('ok');
-        $finded = Electric::where('id', $id)->first();
-        if($finded == null) {
-            $data = $this->repository->create($request->all());
-            return $this->responseJson(200, BaseResource::collection($data));
-        } else {
-            $attributes = $request->except([]);
-            $data = $this->repository->update($attributes, $id);
-            return $this->responseJson(200, new BaseResource($data));
-        }
-
+        $attributes = $request->except([]);
+        $data = $this->repository->update($attributes, $id);
+        return $this->responseJson(200, new BaseResource($data));
     }
 
     /**
      * @OA\Delete(
-     *   path="/api/electric/{id}",
-     *   tags={"Electric"},
+     *   path="/api/utilities/{id}",
+     *   tags={"Utilities"},
      *   summary="Delete ..............",
-     *   operationId="electric_delete",
+     *   operationId="utilities_delete",
      *   @OA\Parameter(
      *      name="id",
      *      in="path",

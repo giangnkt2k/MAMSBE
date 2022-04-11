@@ -14,6 +14,13 @@ use App\Http\Resources\BaseResource;
 use App\Http\Resources\RoomResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Models\Utilities;
+use App\Models\Rental;
+use App\Models\Bill;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\BillEmail;
+
+
 
 class RoomController extends Controller
 {
@@ -73,13 +80,40 @@ class RoomController extends Controller
     public function index(Request $request)
     {
         $data = $this->repository->getAll($request);
-        error_log($data);
+
+        return $this->responseJson(200, BaseResource::collection($data));
+    }
+
+    public function indexForBill(Request $request)
+    {
+        $data = $this->repository->getAllForBIll($request);
+
+        for ($i = 0; $i < count($data); $i++) {
+            if($data[$i]['rent'] == 1) {
+                $unlities = Utilities::find(json_decode($data[$i]->utilities));
+                $data[$i]['utilities'] = $unlities;
+                $rental = Rental::where('room_id', $data[$i]['id'])->with('user')->first();
+                // $user = $rental[0]->user;
+                if(isset($rental->user)) {
+                    $data[$i]['user'] = $rental->user;
+                }
+                else {
+                    $data[$i]['user'] = null;
+                }
+            }
+       }
         return $this->responseJson(200, BaseResource::collection($data));
     }
 
     public function indexCollectWater(Request $request)
     {
         $data = $this->repository->getListToCollectWater($request);
+        return $this->responseJson(200, BaseResource::collection($data));
+    }
+
+    public function indexCollectElectric(Request $request)
+    {
+        $data = $this->repository->getListToCollectElectric($request);
         return $this->responseJson(200, BaseResource::collection($data));
     }
 
@@ -113,12 +147,40 @@ class RoomController extends Controller
             $req['utilities'] = json_encode($request->utilities);
             $req['rules'] = json_encode($request->rules);
             $req['images'] = json_encode($request->images);
-            // dd($req['utilities']);
             $data = $this->repository->create($req);
+            $utilities = Utilities::find(json_decode($request->utilities));
+            $data->utilities()->attach($utilities);
+
             return $this->responseJson(200, new RoomResource($data));
         } catch (\Exception $e) {
             throw $e;
         }
+    }
+
+    public function sendBillEmail(Request $request) {
+        $data = $this->repository->getAllForBIll($request);
+        for ($i = 0; $i < count($data); $i++) {
+            $unlities = Utilities::find(json_decode($data[$i]->utilities));
+            $data[$i]['utilities'] = $unlities;
+            $rental = Rental::where('room_id', $data[$i]['id'])->with('user')->first();
+            $bill = Bill::where('room_id', $data[$i]['id'])->first();
+            if(isset($bill)) {
+                $data[$i]['bill'] = $bill;
+            }
+            // $user = $rental[0]->user;
+            $data[$i]['date'] = $request->date;
+            if(isset($rental->user)) {
+                $data[$i]['user'] = $rental->user;
+                Mail::to($data[$i]['user']->email, $data[$i]['user']->name)->send(new BillEmail($data[$i]));
+            }
+            else {
+                $data[$i]['user'] = null;
+            }
+
+       }
+
+        return $this->responseJson(200, null, "Gửi yêu cầu thành công.");
+        echo "HTML Email Sent. Check your inbox.";
     }
 
     /**

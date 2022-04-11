@@ -36,17 +36,33 @@ Route::group(['namespace' => 'App\Http\Controllers\Api'], function () {
         Route::post('building/import', 'BuildingController@import');
         Route::post('room/import', 'RoomController@import');
         Route::get('room/collectWater', 'RoomController@indexCollectWater');
+        Route::get('room/collectElectric', 'RoomController@indexCollectElectric');
+        Route::get('room/indexForBill', 'RoomController@indexForBill');
         Route::post('room/deleteImg', 'RoomController@deleteImg');
         Route::post('building/deleteImg', 'BuildingController@deleteImg');
         Route::apiResource('room', 'RoomController');
         Route::apiResource('contract', 'ContractController');
         Route::apiResource('rental', 'RentalController');
+        Route::apiResource('water', 'WaterController');
+        Route::apiResource('electric', 'ElectricController');
+        Route::get('bill/indexByDate', 'BillController@indexByDate');
+        Route::post('bill/addMany', 'BillController@addMany');
+
+        Route::apiResource('bill', 'BillController');
+
         Route::post('client/import', 'ClientController@import');
         Route::post('client/deleteImg', 'ClientController@deleteImg');
         Route::post('client/importAva', 'ClientController@importAva');
         Route::post('client/deleteImgAva', 'ClientController@deleteImgAva');
         Route::post('image/edit/{id}', 'ImageController@update');
         Route::apiResource('image', 'ImageController');
+        Route::get('sendBillEmail','RoomController@sendBillEmail');
+
+        //dashboard
+        Route::get('dashboard/clientsInBuilding', 'DashboardController@clientsInBuilding');
+        Route::get('dashboard/roomStatus', 'DashboardController@roomStatus');
+        Route::apiResource('dashboard', 'DashboardController');
+
 
     });
     Route::apiResource('city', 'CityController');

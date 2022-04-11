@@ -17,6 +17,9 @@ use App\Repositories\Contracts\RoomRepositoryInterface;
 use App\Repositories\Contracts\ClientRepositoryInterface;
 use App\Repositories\Contracts\ContractRepositoryInterface;
 use App\Repositories\Contracts\RentalRepositoryInterface;
+use App\Repositories\Contracts\WaterRepositoryInterface;
+use App\Repositories\Contracts\ElectricRepositoryInterface;
+use App\Repositories\Contracts\BillRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 use Repository\BaseRepository;
 use Repository\AuthRepository;
@@ -32,6 +35,9 @@ use Repository\RoomRepository;
 use Repository\ContractRepository;
 use Repository\SettingRepository;
 use Repository\RentalRepository;
+use Repository\WaterRepository;
+use Repository\ElectricRepository;
+use Repository\BillRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -54,6 +60,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ClientRepositoryInterface::class, ClientRepository::class);
         $this->app->bind(ContractRepositoryInterface::class, ContractRepository::class);
         $this->app->bind(RentalRepositoryInterface::class, RentalRepository::class);
+        $this->app->bind(RentalRepositoryInterface::class, RentalRepository::class);
+        $this->app->bind(WaterRepositoryInterface::class, WaterRepository::class);
+        $this->app->bind(ElectricRepositoryInterface::class, ElectricRepository::class);
+        $this->app->bind(BillRepositoryInterface::class, BillRepository::class);
         //Customer
         if ($this->app->environment('local', 'testing')) {
             $this->app->register(DuskServiceProvider::class);

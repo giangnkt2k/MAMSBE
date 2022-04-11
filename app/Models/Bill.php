@@ -2,7 +2,7 @@
 /**
  * Created by PhpStorm.
  * User: cuongnt
- * Year: 2022-04-04
+ * Year: 2022-04-08
  */
 
 namespace App\Models;
@@ -10,21 +10,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\Room;
 
-class Water extends Model
+class Bill extends Model
 {
     use HasFactory;
-    use SoftDeletes;
+    // use SoftDeletes;
 
-    protected $table = 'waters';
+    protected $table = 'bills';
 
     protected $fillable = [
-        'id',
         'room_id',
+        'user_id',
         'date',
-        'old_number',
-        'new_number',
+        'invoice_component',
+        'status_bill',
     ];
 
     protected $dates = ['deleted_at'];
@@ -32,10 +31,5 @@ class Water extends Model
     protected $casts = [
         'data' => 'array'
     ];
-
-    public function room()
-    {
-        return $this->belongsTo(room::class, 'room_id');
-    }
 
 }

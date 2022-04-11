@@ -10,10 +10,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\WaterRequest;
 use App\Repositories\Contracts\WaterRepositoryInterface;
-use App\Http\Resources\WaterRequest;
 use App\Http\Resources\BaseResource;
 use App\Http\Resources\WaterResource;
 use Illuminate\Http\Request;
+use App\Models\Water;
 
 class WaterController extends Controller
 {
@@ -206,9 +206,15 @@ class WaterController extends Controller
      */
     public function update(WaterRequest $request, $id)
     {
-        $attributes = $request->except([]);
-        $data = $this->repository->update($attributes, $id);
-        return $this->responseJson(200, new BaseResource($data));
+        $finded = Water::where('id', $id)->first();
+        if($finded == null) {
+            $data = $this->repository->create($request->all());
+            return $this->responseJson(200, BaseResource::collection($data));
+        } else {
+            $attributes = $request->except([]);
+            $data = $this->repository->update($attributes, $id);
+            return $this->responseJson(200, new BaseResource($data));
+        }
     }
 
     /**

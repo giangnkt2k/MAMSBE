@@ -44,10 +44,22 @@ class RoomRepository extends BaseRepository implements RoomRepositoryInterface
         else
         {
             $rooms = $this->model->with(['building'])->where(['building_id'=> $request->building_id]);
-
-            // $rooms = $this->model->select('rooms.*');
         }
-        error_log($request->building_id);
+        return  Common::pagination($request, $rooms);
+    }
+
+    public function getAllForBIll ($request)
+    {
+        $rooms = $this->model->where(['rent' => 1])->with(['building'])
+        ->where(
+            ['building_id'=> $request->building_id,
+             'floor_id' =>$request->floor_id,])
+        ->with('water', function($query) use($request) {
+            $query->where('date', $request->date);
+        })
+        ->with('electric', function($query) use($request) {
+            $query->where('date', $request->date);
+        });
         return  Common::pagination($request, $rooms);
     }
 
@@ -56,6 +68,19 @@ class RoomRepository extends BaseRepository implements RoomRepositoryInterface
 
             $rooms = $this->model->with(['building'])
             ->with('water', function($query) use($request) {
+                $query->whereIn('date', [$request->date, $request->date('date')->subMonth()->format('Y-m-d')]);
+            })
+            ->where(['building_id'=> $request->building_id])
+            ->where(['floor_id' => $request->floor_id]);
+
+        return  Common::pagination($request, $rooms);
+    }
+
+    public function getListToCollectElectric ($request)
+    {
+
+            $rooms = $this->model->with(['building'])
+            ->with('electric', function($query) use($request) {
                 $query->whereIn('date', [$request->date, $request->date('date')->subMonth()->format('Y-m-d')]);
             })
             ->where(['building_id'=> $request->building_id])

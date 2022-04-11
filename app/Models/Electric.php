@@ -32,4 +32,8 @@ class Electric extends Model
         'data' => 'array'
     ];
 
+    public function room()
+    {
+        return $this->belongsTo(room::class, 'room_id');
+    }
 }

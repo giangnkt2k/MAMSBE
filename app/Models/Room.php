@@ -14,6 +14,8 @@ use App\Models\Building;
 use App\Models\Water;
 use App\Models\Electric;
 use App\Models\Contract;
+use App\Models\Rental;
+use App\Models\Utilities;
 
 class Room extends Model
 {
@@ -67,9 +69,14 @@ class Room extends Model
         return $this->hasMany(electric::class);
     }
 
-    // public function contract()
-    // {
-    //     return $this->belongsTo(building::class, 'building_id');
-    // }
+    public function utilities()
+    {
+        return $this->belongsToMany(utilities::class);
+    }
+
+    public function rental()
+    {
+        return $this->belongsTo(rental::class);
+    }
 
 }

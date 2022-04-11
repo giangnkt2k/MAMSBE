@@ -2,21 +2,19 @@
 /**
  * Created by PhpStorm.
  * User: cuongnt
- * Year: 2022-04-04
+ * Year: 2022-04-08
  */
 
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ElectricRequest;
-use App\Repositories\Contracts\ElectricRepositoryInterface;
+use App\Http\Requests\BillRequest;
+use App\Repositories\Contracts\BillRepositoryInterface;
 use App\Http\Resources\BaseResource;
-use App\Http\Resources\ElectricResource;
+use App\Http\Resources\BillResource;
 use Illuminate\Http\Request;
-use App\Models\Electric;
 
-
-class ElectricController extends Controller
+class BillController extends Controller
 {
 
      /**
@@ -24,17 +22,17 @@ class ElectricController extends Controller
      */
     protected $repository;
 
-    public function __construct(ElectricRepositoryInterface $repository)
+    public function __construct(BillRepositoryInterface $repository)
     {
         $this->repository = $repository;
     }
 
     /**
      * @OA\Get(
-     *   path="/api/electric",
-     *   tags={"Electric"},
-     *   summary="List electric",
-     *   operationId="electric_index",
+     *   path="/api/bill",
+     *   tags={"Bill"},
+     *   summary="List bill",
+     *   operationId="bill_index",
      *   @OA\Response(
      *     response=200,
      *     description="Send request success",
@@ -71,18 +69,25 @@ class ElectricController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index(ElectricRequest $request)
+    public function index(BillRequest $request)
     {
-        $data = $this->repository->paginate($request->per_page);
+        $data = $this->repository->getAll($request);
+        return $this->responseJson(200, BaseResource::collection($data));
+    }
+
+    public function indexByDate(BillRequest $request)
+    {
+
+        $data = $this->repository->getBillByDate($request);
         return $this->responseJson(200, BaseResource::collection($data));
     }
 
     /**
      * @OA\Post(
-     *   path="/api/electric",
-     *   tags={"Electric"},
-     *   summary="Add new electric",
-     *   operationId="electric_create",
+     *   path="/api/bill",
+     *   tags={"Bill"},
+     *   summary="Add new bill",
+     *   operationId="bill_create",
      *   @OA\Parameter(name="name", in="query", required=true,
      *     @OA\Schema(type="string"),
      *   ),
@@ -100,22 +105,39 @@ class ElectricController extends Controller
      * @return \Illuminate\Http\JsonResponse
      * @throws \Exception
      */
-    public function store(ElectricRequest $request)
+    public function store(BillRequest $request)
     {
         try {
-            $data = $this->repository->create($request->all());
-            return $this->responseJson(200, new ElectricResource($data));
+            $req = $request->all();
+            $req['invoice_component'] = json_encode($request->invoice_component);
+            $data = $this->repository->create($req);
+            return $this->responseJson(200, new BillResource($data));
         } catch (\Exception $e) {
             throw $e;
         }
     }
 
+    public function addMany(BillRequest $request)
+    {
+        try {
+            $req = $request->all();
+            $bills = $req['bills'];
+            // dd(json_encode($bills[0]['invoice_component']));
+            for ($i = 0; $i < count($bills); $i++) {
+                $bills[$i]['invoice_component'] = json_encode($bills[$i]['invoice_component']);
+                $this->repository->create($bills[$i]);
+            }
+            return $this->responseJson(200);
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
     /**
      * @OA\Get(
-     *   path="/api/electric/{id}",
-     *   tags={"Electric"},
-     *   summary="Detail Electric",
-     *   operationId="electric_show",
+     *   path="/api/bill/{id}",
+     *   tags={"Bill"},
+     *   summary="Detail Bill",
+     *   operationId="bill_show",
      *   @OA\Parameter(
      *     name="id",
      *     in="path",
@@ -158,10 +180,10 @@ class ElectricController extends Controller
 
     /**
      * @OA\Post(
-     *   path="/api/electric/{id}",
-     *   tags={"Electric"},
-     *   summary="Update Electric",
-     *   operationId="electric_update",
+     *   path="/api/bill/{id}",
+     *   tags={"Bill"},
+     *   summary="Update Bill",
+     *   operationId="bill_update",
      *   @OA\Parameter(
      *     name="id",
      *     in="path",
@@ -205,28 +227,19 @@ class ElectricController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(ElectricRequest $request, $id)
+    public function update(BillRequest $request, $id)
     {
-        // $findData = $this->repository->find($id);
-        // dd('ok');
-        $finded = Electric::where('id', $id)->first();
-        if($finded == null) {
-            $data = $this->repository->create($request->all());
-            return $this->responseJson(200, BaseResource::collection($data));
-        } else {
-            $attributes = $request->except([]);
-            $data = $this->repository->update($attributes, $id);
-            return $this->responseJson(200, new BaseResource($data));
-        }
-
+        $attributes = $request->except([]);
+        $data = $this->repository->update($attributes, $id);
+        return $this->responseJson(200, new BaseResource($data));
     }
 
     /**
      * @OA\Delete(
-     *   path="/api/electric/{id}",
-     *   tags={"Electric"},
+     *   path="/api/bill/{id}",
+     *   tags={"Bill"},
      *   summary="Delete ..............",
-     *   operationId="electric_delete",
+     *   operationId="bill_delete",
      *   @OA\Parameter(
      *      name="id",
      *      in="path",
