@@ -10,6 +10,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Client;
+use App\Models\Room;
 
 class Bill extends Model
 {
@@ -31,5 +33,15 @@ class Bill extends Model
     protected $casts = [
         'data' => 'array'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(client::class, 'user_id');
+    }
+
+    public function room()
+    {
+        return $this->belongsTo(room::class, 'room_id');
+    }
 
 }

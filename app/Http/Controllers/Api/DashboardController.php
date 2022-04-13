@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use App\Models\Building;
 use App\Models\Room;
 use App\Models\Water;
+use App\Models\Bill;
 use App\Models\Client;
 use App\Models\Electric;
 use App\Models\Contract;
@@ -107,7 +108,6 @@ class DashboardController extends Controller
             'labels' => $labels,
             'clients' => $arr_clients
         ]);
-
         return $this->responseJson(200, $data);
     }
 
@@ -125,11 +125,28 @@ class DashboardController extends Controller
                 $empty++;
             }
         }
-       $data = [
-           'fill' => $fill,
-           'empty' => $empty
-       ];
+       $data = [$fill, $empty];
         return $this->responseJson(200, $data);
+    }
+
+    public function indexNUmberByDateInBuilding () {
+        $buildings = Building::with('room')->get();
+        for ($i = 0; $i < count($buildings); $i++) {
+            $building = $buildings[$i];
+            for ($j = 0; $j < count($building->room); $j++) {
+                $room = $building->room[$j];
+
+            }
+        }
+        dd($buildings);
+    }
+
+    public function listRoomNotPaied() {
+       $rooms = Bill::where('status_bill', 0)->with('user')->with('room', function ($q) {
+           $q->with('building');
+       })->get();
+
+       return $this->responseJson(200, new DashboardResource($rooms));
     }
 
     /**

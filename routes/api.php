@@ -61,6 +61,8 @@ Route::group(['namespace' => 'App\Http\Controllers\Api'], function () {
         //dashboard
         Route::get('dashboard/clientsInBuilding', 'DashboardController@clientsInBuilding');
         Route::get('dashboard/roomStatus', 'DashboardController@roomStatus');
+        Route::get('dashboard/indexNUmberByDateInBuilding', 'DashboardController@indexNUmberByDateInBuilding');
+        Route::get('dashboard/listRoomNotPaied', 'DashboardController@listRoomNotPaied');
         Route::apiResource('dashboard', 'DashboardController');
 
 
