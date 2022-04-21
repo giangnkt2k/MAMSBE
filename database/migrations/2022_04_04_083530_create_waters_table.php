@@ -17,8 +17,8 @@ class CreateWatersTable extends Migration
             $table->id();
             $table->integer('room_id');
             $table->date('date');
-            $table->integer('old_number');
-            $table->integer('new_number');
+            $table->integer('old_number')->nullable();
+            $table->integer('new_number')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
