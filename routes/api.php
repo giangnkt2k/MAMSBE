@@ -57,6 +57,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Api'], function () {
         Route::post('image/edit/{id}', 'ImageController@update');
         Route::apiResource('image', 'ImageController');
         Route::get('sendBillEmail','RoomController@sendBillEmail');
+        Route::get('sendBillSMS','RoomController@sendBillSMS');
 
         //dashboard
         Route::get('dashboard/clientsInBuilding', 'DashboardController@clientsInBuilding');

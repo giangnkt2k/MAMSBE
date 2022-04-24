@@ -19,6 +19,7 @@ use App\Models\Rental;
 use App\Models\Bill;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\BillEmail;
+use Nexmo\Laravel\Facade\Nexmo;
 
 
 
@@ -181,6 +182,38 @@ class RoomController extends Controller
 
         return $this->responseJson(200, null, "Gửi yêu cầu thành công.");
         echo "HTML Email Sent. Check your inbox.";
+    }
+
+    public function sendBillSMS(Request $request) {
+        $data = $this->repository->getAllForBIll($request);
+        for ($i = 0; $i < count($data); $i++) {
+            $unlities = Utilities::find(json_decode($data[$i]->utilities));
+            $data[$i]['utilities'] = $unlities;
+            $rental = Rental::where('room_id', $data[$i]['id'])->with('user')->first();
+            $bill = Bill::where('room_id', $data[$i]['id'])->first();
+            if(isset($bill)) {
+                $data[$i]['bill'] = $bill;
+            }
+            // $user = $rental[0]->user;
+            $data[$i]['date'] = $request->date;
+            if(isset($rental->user)) {
+                $data[$i]['user'] = $rental->user;
+                $invoice_component = json_decode($data[$i]->bill->invoice_component);
+                Nexmo::message()->send([
+                    'to' => '84903463046',
+                    'from' => 'MAMS'.$data[$i]->building->name,
+                    'text' => 'Your bill '. $data[$i]['date'].': '.
+                    'Client: ' .$data[$i]['user']['name'].
+                    ' .Total: ' .$invoice_component->totalPrice.' VND',
+                ]);
+            }
+            else {
+                $data[$i]['user'] = null;
+            }
+
+       }
+
+        return $this->responseJson(200, null, "Gửi yêu cầu thành công.");
     }
 
     /**
