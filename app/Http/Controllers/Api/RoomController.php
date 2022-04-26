@@ -94,7 +94,6 @@ class RoomController extends Controller
                 $unlities = Utilities::find(json_decode($data[$i]->utilities));
                 $data[$i]['utilities'] = $unlities;
                 $rental = Rental::where('room_id', $data[$i]['id'])->with('user')->first();
-                // $user = $rental[0]->user;
                 if(isset($rental->user)) {
                     $data[$i]['user'] = $rental->user;
                 }

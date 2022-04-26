@@ -4,21 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <style>
+        #customers {
+          font-family: Arial, Helvetica, sans-serif;
+          border-collapse: collapse;
+          width: 100%;
+        }
+
+        #customers td, #customers th {
+          border: 1px solid #ddd;
+          padding: 8px;
+        }
+        #customers th {
+          padding-top: 12px;
+          padding-bottom: 12px;
+          text-align: left;
+          background-color: #04AA6D;
+          color: white;
+        }
+        </style>
 </head>
 <body>
-    <div style="border:1px solid #2910b8; padding: 20px;">
-        <div style="text-align: center;">
-            <h2 style="color: #2910b8;">Bill monthly {{ $detail->date }}</h2>
+    <div style="padding: 20px;">
+        <div style="text-align: center; background: #4285f4; height: 50px; line-height: 50px;">
+            <h2 style="color: #f4f3f7;">BILL  {{ $detail->date }}</h2>
         </div>
-        <p>Bill detail for {{ $detail->name}}</p>
-        <p>Client: {{ $detail->user->name }}</p>
-        <p> </p>
-        <table border style="border: 1px solid #2910b8; width: -webkit-fill-available;">
+        <p>Bill detail for <b>{{ $detail->name}}</b></p>
+        <p>Client: <b>{{ $detail->user->name }}</b></p>
+        <table  id="customers" style="width: -webkit-fill-available;">
             <thead>
                 <tr>
-                    <th style="padding: 5px;">Invoice component</th>
-                    <th style="padding: 5px;">Price</th>
+                    <th style="text-align: center;">Invoice component</th>
+                    <th style="text-align: center;">Price</th>
                 </tr>
             </thead>
             <tbody>
@@ -39,7 +57,7 @@
                     <td>
                         <ul>
                             @foreach ($detail->invoice_component->service_price as $item)
-                            <li>
+                            <li style="text-align: left;">
                                 <span>
                                     {{ $item->label }}: {{ $item->price }}VND
                                 </span>
