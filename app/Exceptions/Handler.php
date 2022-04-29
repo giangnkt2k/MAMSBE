@@ -58,7 +58,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
-        // Trả về Json nếu Validate bị lỗi khi gọi API
+        // Returns Json if Validation fails when calling API
 //        if ($request->expectsJson()) {
             if ($exception instanceof ValidationException) {
                 $errors = $exception->errors();
