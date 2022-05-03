@@ -63,4 +63,14 @@ class Common
         }
     }
 
+    public static function convertCsvToArray($path, $model, $limit = 500, $header_user_allocation = false)
+    {
+        $getEncoding = mb_detect_encoding(file_get_contents($path), mb_list_encodings(), true);
+        $file = fopen($path, 'r');
+        $delimiter = "\n";
+        $header = null;
+        $iterator = 0;
+        $data = array();
+    }
+
 }
