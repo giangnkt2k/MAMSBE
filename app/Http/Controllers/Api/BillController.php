@@ -82,6 +82,16 @@ class BillController extends Controller
         return $this->responseJson(200, BaseResource::collection($data));
     }
 
+    public function getBillByRoom(BillRequest $request)
+    {
+
+        $data = $this->repository->getBillByRoom($request);
+        // $invoice_component = json_decode($bills->invoice_component);
+        for ($i = 0; $i < count($data); $i++) {
+            $data[$i]->invoice_component = json_decode($data[$i]->invoice_component);
+            }
+        return $this->responseJson(200, BaseResource::collection($data));
+    }
     /**
      * @OA\Post(
      *   path="/api/bill",

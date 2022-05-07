@@ -32,6 +32,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Api'], function () {
         Route::apiResource('blog', 'BlogController');
         Route::apiResource('building', 'BuildingController');
         Route::apiResource('client', 'ClientController');
+        Route::apiResource('status', 'StatusController');
         Route::post('building/delete', 'BuildingController@destroy');
         Route::post('building/import', 'BuildingController@import');
         Route::post('room/import', 'RoomController@import');
@@ -46,6 +47,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Api'], function () {
         Route::apiResource('water', 'WaterController');
         Route::apiResource('electric', 'ElectricController');
         Route::get('bill/indexByDate', 'BillController@indexByDate');
+        Route::get('bill/indexByRoom', 'BillController@getBillByRoom');
         Route::post('bill/addMany', 'BillController@addMany');
 
         Route::apiResource('bill', 'BillController');
@@ -57,6 +59,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Api'], function () {
         Route::post('image/edit/{id}', 'ImageController@update');
         Route::apiResource('image', 'ImageController');
         Route::get('sendBillEmail','RoomController@sendBillEmail');
+        Route::get('sendtoAdmin','StatusController@sendtoAdmin');
         Route::get('sendBillSMS','RoomController@sendBillSMS');
 
         //dashboard

@@ -2,22 +2,28 @@
 /**
  * Created by PhpStorm.
  * User: cuongnt
- * Year: 2022-03-26
+ * Year: 2022-05-07
  */
 
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ClientRequest;
-use App\Repositories\Contracts\ClientRepositoryInterface;
+use App\Http\Requests\StatusRequest;
+use App\Repositories\Contracts\StatusRepositoryInterface;
 use App\Http\Resources\BaseResource;
-use App\Http\Resources\ClientResource;
+use App\Http\Resources\StatusResource;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+use App\Models\Bill;
+use App\Models\Rental;
+use App\Models\Room;
+use App\Models\Water;
+use App\Models\Electric;
+use App\Mail\ReportToAdmin;
+use Illuminate\Support\Facades\Mail;
 
-class ClientController extends Controller
+
+class StatusController extends Controller
 {
 
      /**
@@ -25,17 +31,17 @@ class ClientController extends Controller
      */
     protected $repository;
 
-    public function __construct(ClientRepositoryInterface $repository)
-    {
-        $this->repository = $repository;
-    }
+    // public function __construct(StatusRepositoryInterface $repository)
+    // {
+    //     $this->repository = $repository;
+    // }
 
     /**
      * @OA\Get(
-     *   path="/api/client",
-     *   tags={"Client"},
-     *   summary="List client",
-     *   operationId="client_index",
+     *   path="/api/status",
+     *   tags={"Status"},
+     *   summary="List status",
+     *   operationId="status_index",
      *   @OA\Response(
      *     response=200,
      *     description="Send request success",
@@ -72,18 +78,29 @@ class ClientController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index(ClientRequest $request)
+    public function index(Request $request)
     {
-        $data = $this->repository->getAll($request);
-        return $this->responseJson(200, BaseResource::collection($data));
+        $req = $request->all();
+        $user_id = $req['user_id'];
+        $room_id = Rental::where('user_id', $user_id)->value('room_id');
+        $room = Room::with(['building'])->where('id', $room_id)->get();
+        $water = Water::where('room_id', $room_id)->latest()->value('new_number');
+        $electric = Electric::where('room_id', $room_id)->latest()->value('new_number');
+
+        $data = [
+            'room' => $room,
+            'water' => $water,
+            'electric' => $electric,
+        ];
+        return $this->responseJson(200, ($data));
     }
 
     /**
      * @OA\Post(
-     *   path="/api/client",
-     *   tags={"Client"},
-     *   summary="Add new client",
-     *   operationId="client_create",
+     *   path="/api/status",
+     *   tags={"Status"},
+     *   summary="Add new status",
+     *   operationId="status_create",
      *   @OA\Parameter(name="name", in="query", required=true,
      *     @OA\Schema(type="string"),
      *   ),
@@ -101,76 +118,29 @@ class ClientController extends Controller
      * @return \Illuminate\Http\JsonResponse
      * @throws \Exception
      */
-    public function store(ClientRequest $request)
+    public function store(StatusRequest $request)
     {
         try {
-            $req = $request->all();
-            if(isset($req['avatar'])) {
-            $req['avatar'] = json_encode($request->avatar);
-            }
-            $req['images'] = json_encode($request->images);
-            $data = $this->repository->create($req);
-
-            User::insert([
-                'email' => $request->email,
-                'phone' => $request->phone,
-                'password' => Hash::make('123456'),
-                'name' => $request->name,
-                'role' => 3,
-                'client_id' => $data->id,
-            ]);
-
-            return $this->responseJson(200, new ClientResource($data));
+            $data = $this->repository->create($request->all());
+            return $this->responseJson(200, new StatusResource($data));
         } catch (\Exception $e) {
             throw $e;
         }
     }
 
-    public function import(ClientRequest $request)
-    {
-        try {
-            $image = $this->repository->import($request);
-            return $this->responseJson(Response::HTTP_OK, $image, 'upload success');
-        } catch (\Exception $e) {
-            return $this->responseJsonEx($e);
-        }
+    public function sendtoAdmin(Request $request) {
+        Mail::to('thanhgiangss2@gmail.com', $request->client)->send(new ReportToAdmin($request));
+
+        return $this->responseJson(200, null, "Gửi yêu cầu thành công.");
+        echo "HTML Email Sent. Check your inbox.";
     }
 
-    public function deleteImg(ClientRequest $request)
-    {
-        try {
-            $image = $this->repository->deleteImg($request);
-            return $this->responseJson(Response::HTTP_OK, $image, 'upload success');
-        } catch (\Exception $e) {
-            return $this->responseJsonEx($e);
-        }
-    }
-
-    public function importAva(ClientRequest $request)
-    {
-        try {
-            $image = $this->repository->importAva($request);
-            return $this->responseJson(Response::HTTP_OK, $image, 'upload success');
-        } catch (\Exception $e) {
-            return $this->responseJsonEx($e);
-        }
-    }
-
-    public function deleteImgAva(ClientRequest $request)
-    {
-        try {
-            $image = $this->repository->deleteImgAva($request);
-            return $this->responseJson(Response::HTTP_OK, $image, 'upload success');
-        } catch (\Exception $e) {
-            return $this->responseJsonEx($e);
-        }
-    }
     /**
      * @OA\Get(
-     *   path="/api/client/{id}",
-     *   tags={"Client"},
-     *   summary="Detail Client",
-     *   operationId="client_show",
+     *   path="/api/status/{id}",
+     *   tags={"Status"},
+     *   summary="Detail Status",
+     *   operationId="status_show",
      *   @OA\Parameter(
      *     name="id",
      *     in="path",
@@ -213,10 +183,10 @@ class ClientController extends Controller
 
     /**
      * @OA\Post(
-     *   path="/api/client/{id}",
-     *   tags={"Client"},
-     *   summary="Update Client",
-     *   operationId="client_update",
+     *   path="/api/status/{id}",
+     *   tags={"Status"},
+     *   summary="Update Status",
+     *   operationId="status_update",
      *   @OA\Parameter(
      *     name="id",
      *     in="path",
@@ -260,7 +230,7 @@ class ClientController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(ClientRequest $request, $id)
+    public function update(StatusRequest $request, $id)
     {
         $attributes = $request->except([]);
         $data = $this->repository->update($attributes, $id);
@@ -269,10 +239,10 @@ class ClientController extends Controller
 
     /**
      * @OA\Delete(
-     *   path="/api/client/{id}",
-     *   tags={"Client"},
+     *   path="/api/status/{id}",
+     *   tags={"Status"},
      *   summary="Delete ..............",
-     *   operationId="client_delete",
+     *   operationId="status_delete",
      *   @OA\Parameter(
      *      name="id",
      *      in="path",

@@ -37,4 +37,11 @@ class BillRepository extends BaseRepository implements BillRepositoryInterface
         return  Common::pagination($request, $bills);
     }
 
+    public function getBillByRoom ($request)
+    {
+        $bills = $this->model->where(['user_id' => $request->user_id]);
+
+        return  Common::pagination($request, $bills);
+    }
+
 }
